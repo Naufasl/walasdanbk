@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Wali Kelas</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-dark bg-dark px-4 mb-4">
+        <a class="navbar-brand" href="#">Sistem BK</a>
+        <button onclick="logout()" class="btn btn-outline-light btn-sm">Keluar (Logout)</button>
+    </nav>
+
+    <div class="container pb-5">
+        <!-- Header Info -->
+        <div class="mb-4">
+            <h2>Dashboard Wali Kelas</h2>
+            <p class="text-muted">Kelola data kehadiran siswa dan rujukan BK dengan mudah dari halaman ini.</p>
+        </div>
+
+        <!-- Kartu Statistik -->
+        <div class="row text-center mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm p-3">
+                    <span class="text-muted small text-uppercase">Total Siswa Binaan</span>
+                    <h3 id="statTotal" class="fw-bold mt-2">0</h3>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm p-3">
+                    <span class="text-muted small text-uppercase" id="labelTanggalHadir">Hadir Hari Ini</span>
+                    <h3 id="statHadir" class="fw-bold text-success mt-2">0</h3>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm p-3">
+                    <span class="text-muted small text-uppercase">Dalam Penanganan BK</span>
+                    <h3 id="statBk" class="fw-bold text-warning mt-2">0</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tombol Aksi Utama -->
+        <div class="d-flex flex-wrap gap-2 mb-4">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahSiswa">+ Tambah Siswa Baru</button>
+            <button class="btn btn-outline-danger" onclick="hapusSemuaSiswa()">🗑️ Hapus Semua Siswa</button>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalPasteExcel">📂 Upload File Excel Siswa</button>
+        </div>
+
+        <!-- Bagian Tabel & Filter -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-6">
+                        <h5 class="card-title mb-0">Daftar Siswa & Filter Kehadiran</h5>
+                    </div>
+                    <div class="col-md-6 d-flex justify-content-md-end gap-2 mt-2 mt-md-0">
+                        <input type="date" id="filterTanggal" class="form-control form-control-sm" style="width: 160px;">
+                        <button class="btn btn-dark btn-sm" onclick="filterDataAbsen()">Filter</button>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <small class="text-muted" id="infoTanggalAbsen">Mengelola absensi untuk tanggal:</small>
+                    <div>
+                        <button class="btn btn-success btn-sm me-2" onclick="simpanSemuaAbsen()">💾 Simpan Semua Absen</button>
+                        <button class="btn btn-secondary btn-sm" onclick="toggleLihatDataTersimpan()">👁️ Lihat Data Tersimpan</button>
+                    </div>
+                </div>
+
+                <!-- Kartu Rekap Data yang Sudah Disimpan (Awalnya Tersembunyi) -->
+                <div id="cardDataTersimpan" class="card shadow-sm mb-4" style="display: none;">
+                    <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                        <span>Rekap Absensi Tersimpan (<span id="labelTanggalTersimpan">-</span>)</span>
+                        <button class="btn btn-sm btn-light" onclick="toggleLihatDataTersimpan()">Tutup</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle" id="tabelDataTersimpan">
+                               <thead>
+                                    <tr>
+                                        <th>NO</th>
+                                        <th>NIS</th>
+                                        <th>NAMA SISWA</th>
+                                        <th>L/P</th>
+                                        <th>STATUS ABSEN</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Data rekap tersimpan akan muncul di sini -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle" id="tabelSiswa">
+                        <thead>
+                            <tr>
+                                <th>NO</th>
+                                <th>NIS</th>
+                                <th>NAMA SISWA</th>
+                                <th>L/P</th>
+                                <th>UBAH STATUS ABSEN</th>
+                                <th>STATUS BK</th>
+                                <th>AKSI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data dimuat dinamis -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Tambah Siswa -->
+    <div class="modal fade" id="modalTambahSiswa" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Siswa Binaan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTambahSiswa">
+                        <div class="mb-3">
+                            <label class="form-label">NIS</label>
+                            <input type="text" class="form-control" id="inputNis" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nama Siswa</label>
+                            <input type="text" class="form-control" id="inputNama" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">L/P (Laki-laki / Perempuan)</label>
+                            <select class="form-select" id="inputGender">
+                                <option value="L">L</option>
+                                <option value="P">P</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Simpan Siswa</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Upload File Excel -->
+    <div class="modal fade" id="modalPasteExcel" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload File Excel Siswa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted small">
+                        Pilih file Excel (.xlsx / .xls) data siswa Anda. Sistem akan otomatis mendeteksi kolom <b>Nama</b> dan <b>L/P</b> dari file tersebut.
+                    </p>
+                    <div class="mb-3">
+                        <input type="file" class="form-control" id="fileExcelInput" accept=".xlsx, .xls">
+                    </div>
+                    <button type="button" class="btn btn-success w-100" onclick="prosesUploadExcel()">Proses & Impor Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SheetJS untuk Membaca Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

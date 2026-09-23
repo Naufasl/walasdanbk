@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Siswa - Guru BK</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-dark bg-dark px-4 mb-4">
+        <a class="navbar-brand" href="bk.html">Sistem BK - Guru BK</a>
+        <div>
+            <a href="bk.html" class="btn btn-outline-light btn-sm me-2">← Kembali ke Menu</a>
+            <button onclick="logout()" class="btn btn-outline-danger btn-sm">Keluar (Logout)</button>
+        </div>
+    </nav>
+
+    <div class="container pb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2>Data Rekap Kehadiran & Kasus Siswa</h2>
+                <p class="text-muted mb-0">Kelola dan pantau status siswa berdasarkan tanggal</p>
+            </div>
+            <button id="btnExport" class="btn btn-success">Export ke Excel (.xlsx)</button>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <!-- Filter Tanggal & Tombol Aksi -->
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-5">
+                        <h5 class="card-title mb-0">Filter Tanggal Penanganan</h5>
+                    </div>
+                    <div class="col-md-7 d-flex justify-content-md-end gap-2 mt-2 mt-md-0 flex-wrap">
+                        <input type="date" id="filterTanggalBK" class="form-control form-control-sm" style="width: 160px;">
+                        <button id="btnFilterBK" class="btn btn-dark btn-sm">Filter</button>
+                        <button class="btn btn-success btn-sm" onclick="simpanDataBK()">💾 Simpan Data BK</button>
+                        <button class="btn btn-secondary btn-sm" onclick="toggleLihatDataTersimpanBK()">👁️ Lihat Data Tersimpan</button>
+                    </div>
+                </div>
+
+                <!-- Kartu Rekap Data BK yang Sudah Disimpan (Awalnya Tersembunyi) -->
+                <div id="cardDataTersimpanBK" class="card shadow-sm mb-4" style="display: none;">
+                    <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                        <span>Rekap Penanganan BK Tersimpan (<span id="labelTanggalTersimpanBK">-</span>)</span>
+                        <button class="btn btn-sm btn-light" onclick="toggleLihatDataTersimpanBK()">Tutup</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered align-middle" id="tabelDataTersimpanBK">
+                                <thead>
+                                    <tr>
+                                        <th>NO</th>
+                                        <th>NIS</th>
+                                        <th>NAMA SISWA</th>
+                                        <th>L/P</th>
+                                        <th>STATUS BK</th>
+                                        <th>TANGGAL PENANGANAN</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Data tersimpan BK muncul di sini -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle" id="tabelRekapBK">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>NIS</th>
+                                <th>Nama Siswa</th>
+                                <th>L/P</th>
+                                <th>Status BK</th>
+                                <th>Tanggal Penanganan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data dimuat lewat script.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SheetJS untuk Export Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
