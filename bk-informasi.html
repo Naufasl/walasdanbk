@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catatan & Pengumuman - Guru BK</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-dark bg-dark px-4 mb-4">
+        <a class="navbar-brand" href="bk.html">Sistem BK - Guru BK</a>
+        <div>
+            <a href="bk.html" class="btn btn-outline-light btn-sm me-2">← Kembali ke Menu</a>
+            <button onclick="logout()" class="btn btn-outline-danger btn-sm">Keluar (Logout)</button>
+        </div>
+    </nav>
+
+    <div class="container pb-5" style="max-width: 900px;">
+        
+        <!-- Tombol Kembali ke Dashboard -->
+        <div class="mb-3">
+            <a href="bk.html" class="btn btn-secondary btn-sm">&laquo; Kembali ke Dashboard</a>
+        </div>
+
+        <!-- Header Judul -->
+        <div class="mb-4">
+            <h2>Catatan & Pengumuman Internal Guru BK</h2>
+            <p class="text-muted">Kelola catatan dan pengumuman internal untuk tim guru BK.</p>
+        </div>
+
+        <!-- Alert Notifikasi Berhasil (Awalnya Tersembunyi) -->
+        <div id="alertSuksesInfo" class="alert alert-success text-center py-2 mb-3" style="display: none;">
+            Catatan/Pengumuman berhasil dipublikasikan!
+        </div>
+
+        <!-- Tombol Navigasi Tab (Buat & Lihat Daftar) -->
+        <div class="d-flex gap-2 mb-4">
+            <button id="btnTabBuatInfo" class="btn btn-primary" onclick="tampilTabInfo('buat')">+ Buat Catatan / Pengumuman</button>
+            <button id="btnTabDaftarInfo" class="btn btn-outline-secondary" onclick="tampilTabInfo('daftar')">📋 Lihat Daftar Informasi</button>
+        </div>
+
+        <!-- SECTION 1: Form Buat Catatan / Pengumuman -->
+        <div id="sectionBuatInfo" class="card shadow-sm p-4 mb-4">
+            <h4 class="mb-3">Form Pengumuman / Catatan Internal</h4>
+            <form id="formInformasi" onsubmit="simpanInformasi(event)">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Judul Pengumuman / Catatan:</label>
+                    <input type="text" class="form-control" id="infoJudul" placeholder="Contoh: Rencana Koordinasi Guru BK Pekan Depan..." required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Isi Pesan / Catatan:</label>
+                    <textarea class="form-control" id="infoPesan" rows="4" placeholder="Tuliskan detail catatan atau pengumuman internal di sini..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary px-4">Publikasikan Catatan</button>
+            </form>
+        </div>
+
+        <!-- SECTION 2: Daftar Informasi Tersimpan (Awalnya Tersembunyi) -->
+        <div id="sectionDaftarInfo" class="card shadow-sm p-4 mb-4" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Daftar Pengumuman & Catatan Internal</h4>
+                <button class="btn btn-outline-danger btn-sm" onclick="hapusSemuaInformasi()">🗑️ Hapus Semua Informasi</button>
+            </div>
+            <div id="wadahDaftarInfo" class="d-flex flex-column gap-3">
+                <!-- Data catatan akan dimuat di sini secara berbaris ke bawah -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

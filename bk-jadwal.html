@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal & Dokumentasi BK</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-dark bg-dark px-4 mb-4">
+        <a class="navbar-brand" href="bk.html">Sistem BK - Guru BK</a>
+        <div>
+            <a href="bk.html" class="btn btn-outline-light btn-sm me-2">← Kembali ke Menu</a>
+            <button onclick="logout()" class="btn btn-outline-danger btn-sm">Keluar (Logout)</button>
+        </div>
+    </nav>
+
+    <div class="container pb-5" style="max-width: 900px;">
+        
+        <!-- Tombol Kembali ke Dashboard -->
+        <div class="mb-3">
+            <a href="bk.html" class="btn btn-secondary btn-sm">&laquo; Kembali ke Dashboard</a>
+        </div>
+
+        <!-- Header Judul -->
+        <div class="mb-4">
+            <h2>Jadwal & Dokumentasi Kegiatan BK</h2>
+            <p class="text-muted">Agenda bimbingan dan catatan kegiatan konseling.</p>
+        </div>
+
+        <!-- Tombol Navigasi Tab (Tambah & Lihat Daftar) -->
+        <div class="d-flex gap-2 mb-4">
+            <button id="btnTabTambah" class="btn btn-primary" onclick="tampilTab('tambah')">+ Tambah Agenda Baru</button>
+            <button id="btnTabDaftar" class="btn btn-outline-secondary" onclick="tampilTab('daftar')">📋 Lihat Daftar Agenda</button>
+        </div>
+
+        <!-- SECTION 1: Form Tambah Agenda -->
+        <div id="sectionTambah" class="card shadow-sm p-4 mb-4">
+            <h4 class="mb-3">Form Tambah Agenda / Dokumentasi</h4>
+            <form id="formAgenda" onsubmit="simpanAgenda(event)">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Tanggal Kegiatan:</label>
+                    <input type="date" class="form-control" id="agendaTanggal" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Kategori:</label>
+                    <select class="form-select" id="agendaKategori">
+                        <option value="Agenda Mingguan">Agenda Mingguan</option>
+                        <option value="Bimbingan Kelompok">Bimbingan Kelompok</option>
+                        <option value="Konseling Individual">Konseling Individual</option>
+                        <option value="Sosialisasi / Klasikal">Sosialisasi / Klasikal</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Judul Kegiatan:</label>
+                    <input type="text" class="form-control" id="agendaJudul" placeholder="Contoh: Layanan Bimbingan Kelompok Kelas XII RPL..." required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Keterangan / Catatan:</label>
+                    <textarea class="form-control" id="agendaKeterangan" rows="4" placeholder="Tuliskan detail atau hasil dokumentasi kegiatan..." required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Upload Foto Dokumentasi (Opsional):</label>
+                    <input type="file" class="form-control" id="agendaFoto" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary px-4">Simpan Agenda</button>
+            </form>
+        </div>
+
+        <!-- SECTION 2: Daftar Agenda Tersimpan (Awalnya Tersembunyi) -->
+        <div id="sectionDaftar" class="card shadow-sm p-4 mb-4" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Daftar Agenda & Dokumentasi BK</h4>
+                <button class="btn btn-outline-danger btn-sm" onclick="hapusSemuaAgenda()">🗑️ Hapus Semua Agenda</button>
+            </div>
+            <div id="wadahDaftarAgenda" class="row g-3">
+                <!-- Data agenda akan dimuat di sini secara dinamis -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
